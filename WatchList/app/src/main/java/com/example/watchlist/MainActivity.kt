@@ -5,14 +5,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.watchlist.ui.theme.WatchListTheme
+import androidx.compose.animation.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -24,19 +30,31 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         topBar = {
                             CenterAlignedTopAppBar(
-                                title = { Text(
-                                    "Centered Top App Bar",
-                                    maxLines = 1,
-                                ) })
+                                colors = TopAppBarDefaults.topAppBarColors(Color.Magenta),
+                                title = {
+                                    Text(
+                                        "WatchList",
+                                        maxLines = 1,
+                                    )
+                                },
+                                navigationIcon = {
+                                    IconButton(onClick = { /* do something */ }) {
+                                        Icon(
+                                            imageVector = Icons.AutoMirrored.Filled.List,
+                                            contentDescription = "Localized description"
+                                        )
+                                    }
+                                },
+                            )
                         },
                         floatingActionButton = {
                             FloatingActionButton(onClick = { /* Handle FAB click */ }) {
-                                Icon(Icons.Filled.Menu, contentDescription = "menu")
+                                Icon(Icons.Filled.Add, contentDescription = "add")
                             }
                         },
                         floatingActionButtonPosition = FabPosition.End
                     ) {
-                        SimpleUI()
+                        ListAnimatedItems(items = listOf("Germany","India","Japan","Brazil","Australia"))
                     }
                 }
             }
@@ -61,4 +79,24 @@ fun SimpleUI() {
             Text("Click Me")
         }
     }
+}
+
+@Composable
+fun ListAnimatedItems(
+     items: List<String>,
+ modifier: Modifier = Modifier
+) {
+     LazyColumn(modifier) {
+         items(items, key = { it }) { item ->
+            ListItem(
+            headlineContent = { Text(item) },
+            modifier = Modifier
+            .animateItem(
+                // Optionally add custom animation specs
+            )
+            .fillParentMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+         )
+         }
+     }
 }
