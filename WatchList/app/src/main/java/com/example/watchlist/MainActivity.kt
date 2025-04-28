@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,7 +17,12 @@ import com.example.watchlist.ui.theme.WatchListTheme
 import androidx.compose.animation.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -28,25 +32,6 @@ class MainActivity : ComponentActivity() {
             WatchListTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Scaffold(
-                        topBar = {
-                            CenterAlignedTopAppBar(
-                                colors = TopAppBarDefaults.topAppBarColors(Color.Magenta),
-                                title = {
-                                    Text(
-                                        "WatchList",
-                                        maxLines = 1,
-                                    )
-                                },
-                                navigationIcon = {
-                                    IconButton(onClick = { /* do something */ }) {
-                                        Icon(
-                                            imageVector = Icons.AutoMirrored.Filled.List,
-                                            contentDescription = "Localized description"
-                                        )
-                                    }
-                                },
-                            )
-                        },
                         floatingActionButton = {
                             FloatingActionButton(onClick = { /* Handle FAB click */ }) {
                                 Icon(Icons.Filled.Add, contentDescription = "add")
@@ -54,7 +39,9 @@ class MainActivity : ComponentActivity() {
                         },
                         floatingActionButtonPosition = FabPosition.End
                     ) {
-                        ListAnimatedItems(items = listOf("Germany","India","Japan","Brazil","Australia"))
+                        CenterAlignedTopAppBarExample()
+                        SimpleUI()
+                        //ScrollableAnimatedItems(items = listOf("Germany","India","Japan","Brazil","Australia","India","Japan","Brazil","Australia","India","Japan","Brazil","Australia","India","Japan","Brazil","Australia","India","Japan","Brazil","Australia"))
                     }
                 }
             }
@@ -81,6 +68,37 @@ fun SimpleUI() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CenterAlignedTopAppBarExample() {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text(
+                        "Centered Top App Bar",
+                        maxLines = 1,
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { /* do something */ }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Localized description"
+                        )
+                    }
+                }
+            )
+        },
+    ){}
+}
+
 @Composable
 fun ListAnimatedItems(
      items: List<String>,
@@ -100,3 +118,79 @@ fun ListAnimatedItems(
          }
      }
 }
+
+@Composable
+fun ScrollableAnimatedItems(
+    items: List<String>,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .background(Color.LightGray) // Optional background for better visualization
+    ) {
+        items.forEach { item ->
+            ListItem(
+                headlineContent = { Text(item) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+            )
+        }
+    }
+}
+
+
+// =========================================================================================
+@Composable
+fun HomeScreen(onNavigateToList: () -> Unit) {
+    var text by remember { mutableStateOf("Hello from Home Screen!") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = text, fontSize = 24.sp)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = onNavigateToList) {
+            Text("Go to List Screen")
+        }
+    }
+}
+
+@Composable
+fun ListScreen(items: List<String>, onNavigateBack: () -> Unit) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("List of Items") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .background(Color.LightGray)
+        ) {
+            items.forEach { item ->
+                ListItem(
+                    headlineContent = { Text(item) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                )
+            }
+        }
+    }
+}
+
