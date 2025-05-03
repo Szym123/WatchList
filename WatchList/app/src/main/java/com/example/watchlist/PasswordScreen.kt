@@ -1,21 +1,24 @@
 package com.example.watchlist
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SecondScreen(navController: NavHostController) {
+fun PasswordScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
-            //AppTopBar(title = "Second Screen") {
-                // Handle button click
-            //}
-            CenterAlignedTopAppBarExample()
+            AppTopBar(
+                showBackArrow = true,
+                onBackClick = { navController.popBackStack() },
+                navController = navController
+            )
         },
         bottomBar = {
             AppNavigationBar(navController)
@@ -27,8 +30,7 @@ fun SecondScreen(navController: NavHostController) {
                 .padding(padding),
             contentAlignment = Alignment.Center
         ) {
-            Text("This is the second screen")
+            Text("This is the password screen")
         }
     }
 }
-

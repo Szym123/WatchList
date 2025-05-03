@@ -3,6 +3,7 @@ package com.example.watchlist
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,12 +12,12 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun DetailsScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             AppTopBar(
-                showBackArrow = false,
-                onBackClick = { /* Handle top bar button click */ },
+                showBackArrow = true,
+                onBackClick = { navController.popBackStack() },
                 navController = navController
             )
         },
@@ -26,7 +27,7 @@ fun MainScreen(navController: NavHostController) {
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate("input") }) {
                 Icon(
-                    imageVector = Icons.Default.Add,
+                    imageVector = Icons.Default.Create,
                     contentDescription = "Add"
                 )
             }
@@ -38,10 +39,7 @@ fun MainScreen(navController: NavHostController) {
                 .padding(padding),
             contentAlignment = Alignment.Center
         ) {
-            Button(onClick = { navController.navigate("second") }) {
-                Text("Go to Second Screen")
-            }
+            Text("This is the details screen")
         }
     }
 }
-

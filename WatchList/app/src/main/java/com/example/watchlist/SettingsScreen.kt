@@ -11,25 +11,17 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun SettingsScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             AppTopBar(
-                showBackArrow = false,
-                onBackClick = { /* Handle top bar button click */ },
+                showBackArrow = true,
+                onBackClick = { navController.popBackStack() },
                 navController = navController
             )
         },
         bottomBar = {
             AppNavigationBar(navController)
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("input") }) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add"
-                )
-            }
         }
     ) { padding ->
         Box(
@@ -38,10 +30,7 @@ fun MainScreen(navController: NavHostController) {
                 .padding(padding),
             contentAlignment = Alignment.Center
         ) {
-            Button(onClick = { navController.navigate("second") }) {
-                Text("Go to Second Screen")
-            }
+            Text("This is the settings screen")
         }
     }
 }
-
