@@ -58,3 +58,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+dependencies {
+    implementation(libs.androidx.runtime.lint)
+    implementation(libs.androidx.room.runtime)
+}

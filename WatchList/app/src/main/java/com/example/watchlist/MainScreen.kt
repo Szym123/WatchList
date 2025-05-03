@@ -1,6 +1,8 @@
 package com.example.watchlist
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
@@ -32,14 +34,16 @@ fun MainScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        Box(
+        Column(
+            verticalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize().verticalScroll(rememberScrollState())
                 .padding(padding),
-            contentAlignment = Alignment.Center
         ) {
-            Button(onClick = { navController.navigate("second") }) {
-                Text("Go to Second Screen")
+            repeat(40) {
+                Text(
+                    text = "Index $it"
+                )
             }
         }
     }

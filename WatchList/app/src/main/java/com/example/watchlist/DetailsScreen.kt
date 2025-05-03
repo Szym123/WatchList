@@ -2,7 +2,6 @@ package com.example.watchlist
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -33,13 +32,15 @@ fun DetailsScreen(navController: NavHostController) {
             }
         }
     ) { padding ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("This is the details screen")
+        ){
+            Text("Image")
+            Text("Name")
+            Text("SubName")
+            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu risus justo. Ut viverra mi quis nunc suscipit, quis eleifend eros condimentum. Nunc faucibus nulla dolor, et consectetur eros porttitor a. Donec gravida, mauris eu condimentum malesuada, lectus dolor lacinia nunc, ut semper lacus tellus ut dolor. Vestibulum id ultricies lacus. Aenean vitae consequat lectus. Sed ac aliquet nulla.")
         }
     }
 }
