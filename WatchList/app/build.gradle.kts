@@ -6,12 +6,13 @@ plugins {
 
 android {
     namespace = "com.example.watchlist"
-    compileSdk = 35
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.example.watchlist"
         minSdk = 28
-        targetSdk = 35
+        //noinspection OldTargetApi
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -60,6 +61,7 @@ dependencies {
 }
 
 dependencies {
+    implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.runtime.lint)
     implementation(libs.androidx.room.runtime)
 }

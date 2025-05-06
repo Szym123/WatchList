@@ -5,15 +5,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
+
     Scaffold(
         topBar = {
             AppTopBar(
@@ -41,11 +42,32 @@ fun MainScreen(navController: NavHostController) {
                 .padding(padding),
         ) {
             repeat(40) {
-                Text(
-                    text = "Index $it"
-                )
+                CardInList()
             }
         }
     }
 }
 
+@Composable
+fun CardInList() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .padding(5.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize()
+        ){
+            Text("XD")
+            Column{
+                Text("Name")
+                Text("More info")
+            }
+            Icon(
+                imageVector = Icons.Default.FavoriteBorder,
+                contentDescription = "Add"
+            )
+        }
+    }
+}
