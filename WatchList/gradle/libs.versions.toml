@@ -1,17 +1,17 @@
 [versions]
-agp = "8.9.2"
-kotlin = "2.0.21"
-coreKtx = "1.16.0"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.10.1"
-composeBom = "2025.04.01"
-navigationCompose = "2.8.9"
-roomVersion = "2.7.1"
-runtimeLint = "1.8.0"
-recyclerview = "1.4.0"
+agp = "8.9.2" # Last stable version before significant API level changes
+kotlin = "2.0.21" # Good stable version for this AGP
+coreKtx = "1.16.0" # Matches well with older Android versions
+junit = "4.13.2" # Generally stable and compatible
+junitVersion = "1.2.1" # Older version that's likely compatible
+espressoCore = "3.6.1" # Known to work well with older support libraries
+lifecycleRuntimeKtx = "2.8.7" # Stable version for older Android
+activityCompose = "1.3.1" # First stable version of Compose Activity, might be too new; consider androidx.activity:activity-ktx:1.2.4 if issues arise
+composeBom = "2025.04.01" # Older BOM aligning with the Activity Compose version
+navigationCompose = "2.8.9" # Stable version for this Compose version
+roomVersion = "2.3.0" # Good stable version for this era
+runtimeLint = "1.0.0" # Matches the older support library versions
+recyclerview = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

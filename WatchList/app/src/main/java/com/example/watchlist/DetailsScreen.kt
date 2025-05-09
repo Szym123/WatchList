@@ -6,10 +6,13 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 
 @Composable
-fun DetailsScreen(navController: NavHostController) {
+fun DetailsScreen(navController: NavHostController, userViewModelFactory: UserViewModelFactory) {
+    val userViewModel: UserViewModel = viewModel(factory = userViewModelFactory)
+
     Scaffold(
         topBar = {
             AppTopBar(

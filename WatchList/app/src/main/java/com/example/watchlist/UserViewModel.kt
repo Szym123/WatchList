@@ -1,74 +1,45 @@
 package com.example.watchlist
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-// 4. ViewModel to manage data and interact with the database
-class MyViewModel(application: android.app.Application) : ViewModel() {
-    private val myDao: MyDao
-    //val allData: MutableLiveData<List<MyData>> = MutableLiveData()
-    val allData: MutableState<List<MyData>> = mutableStateOf(emptyList())
-    val selectedData: MutableState<MyData?> = mutableStateOf(null) // Add this for selected item
+
+// 4. ViewModel
+class UserViewModel(application: android.app.Application) : ViewModel() {
+    private val userDao: UserDao
+    val allUsers: LiveData<List<User>>
 
     init {
         val database = AppDatabase.getInstance(application)
-        myDao = database.myDao()
-        // Load initial data
-        loadAllData()
+        userDao = database.userDao()
+        allUsers = userDao.getAllUsers()
     }
 
-    private fun loadAllData() {
+    fun insertUser(user: User) {
+        // Use viewModelScope to launch coroutine
         viewModelScope.launch(Dispatchers.IO) {
-            val dataList = myDao.getAllData()
-            withContext(Dispatchers.Main) {
-                allData.value = dataList
-            }
+            userDao.insertUser(user)
         }
     }
 
-    fun insertData(name: String, description: String) {
+    /*fun deleteUser(userId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val newData = MyData(name = name, description = description)
-            myDao.insertData(newData)
-            loadAllData() // Reload
+            userDao.deleteUser(userId)
         }
-    }
+    }*/
+}
 
-    fun updateData(data: MyData) {
-        viewModelScope.launch(Dispatchers.IO) {
-            myDao.updateData(data)
-            loadAllData()
-            if (selectedData.value?.id == data.id) {
-                selectedData.value = data
-            }
+// 5. ViewModel Factory
+class UserViewModelFactory(private val application: android.app.Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return UserViewModel(application) as T
         }
-    }
-
-    fun deleteData(data: MyData) {
-        viewModelScope.launch(Dispatchers.IO) {
-            myDao.deleteData(data)
-            loadAllData()
-            if (selectedData.value?.id == data.id) {
-                selectedData.value = null
-            }
-        }
-    }
-
-    fun getDataById(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val data = myDao.getDataById(id)
-            withContext(Dispatchers.Main) {
-                selectedData.value = data
-            }
-        }
-    }
-
-    fun clearSelectedData() {
-        selectedData.value = null
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
