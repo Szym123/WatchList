@@ -59,7 +59,7 @@ dependencies {
 }
 
 dependencies {
-    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.runtime.lint)
     implementation(libs.androidx.room.runtime)
 }

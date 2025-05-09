@@ -5,9 +5,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 // 3. Database Class
-@Database(entities = [User::class], version = 1)
+@Database(entities = [MyData::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
+    abstract fun userDao(): DataDao
 
     companion object {
         @Volatile

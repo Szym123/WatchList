@@ -10,27 +10,27 @@ import kotlinx.coroutines.launch
 
 // 4. ViewModel
 class UserViewModel(application: android.app.Application) : ViewModel() {
-    private val userDao: UserDao
-    val allUsers: LiveData<List<User>>
+    private val userDao: DataDao
+    val allUsers: LiveData<List<MyData>>
 
     init {
         val database = AppDatabase.getInstance(application)
         userDao = database.userDao()
-        allUsers = userDao.getAllUsers()
+        allUsers = userDao.getAllData()
     }
 
-    fun insertUser(user: User) {
+    fun insertData(Data: MyData) {
         // Use viewModelScope to launch coroutine
         viewModelScope.launch(Dispatchers.IO) {
-            userDao.insertUser(user)
+            userDao.insertData(Data)
         }
     }
 
-    /*fun deleteUser(userId: Int) {
+    fun deleteData(dataId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            userDao.deleteUser(userId)
+            userDao.deleteData(dataId)
         }
-    }*/
+    }
 }
 
 // 5. ViewModel Factory

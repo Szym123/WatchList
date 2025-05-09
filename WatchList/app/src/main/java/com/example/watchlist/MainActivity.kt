@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
             WatchListTheme {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "main") {
-                    composable("main") { MainScreen(navController) }
+                    composable("main") { MainScreen(navController, userViewModelFactory) }
                     composable("input") { InputScreen(navController) }
                     composable("settings") { SettingsScreen(navController) }
                     composable("password") { PasswordScreen(navController) }
