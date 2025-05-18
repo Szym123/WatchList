@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -59,7 +60,9 @@ dependencies {
 }
 
 dependencies {
-    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.runtime.lint)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.lifecycle.viewmodelcompose)
+    kapt(libs.room.compiler)
 }

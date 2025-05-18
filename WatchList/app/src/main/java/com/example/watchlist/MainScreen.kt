@@ -14,8 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 
 @Composable
-fun MainScreen(navController: NavHostController, userViewModelFactory: UserViewModelFactory) {
-    val userViewModel: UserViewModel = viewModel(factory = userViewModelFactory)
+fun MainScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
