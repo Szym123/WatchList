@@ -26,6 +26,6 @@ interface UserDao {
     @Insert
     suspend fun insertUser(user: User)
 
-    //@Query("DELETE FROM user_table WHERE $id = :userId")
-    //suspend fun deleteUser(userId: Int)
+    @Query("DELETE FROM user_table WHERE id = :userId")
+    suspend fun deleteUser(userId: Int)
 }

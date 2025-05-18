@@ -9,30 +9,6 @@ import androidx.compose.material3.*
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.Composable
 
-
-@Composable
-fun BottomAppBarExample() {
-    BottomAppBar(
-        actions = {
-            IconButton(onClick = { /* do something */ }) {
-                Icon(Icons.Filled.Check, contentDescription = "Localized description")
-            }
-            IconButton(onClick = { /* do something */ }) {
-                Icon(
-                    Icons.Filled.Home,
-                    contentDescription = "Localized description",
-                )
-            }
-            IconButton(onClick = { /* do something */ }) {
-                Icon(
-                    Icons.Filled.PlayArrow,
-                    contentDescription = "Localized description",
-                )
-            }
-        }
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigationBar(navController: NavHostController) {

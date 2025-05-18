@@ -60,9 +60,10 @@ dependencies {
 }
 
 dependencies {
-    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.runtime.lint)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.lifecycle.viewmodelcompose)
     kapt(libs.room.compiler)
+    implementation(libs.compose.runtime.livedata)
 }

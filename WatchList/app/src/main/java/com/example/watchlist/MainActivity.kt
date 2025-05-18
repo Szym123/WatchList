@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
             applicationContext,
             AppDatabase::class.java,
             "user_database"
-        ).createFromFile(databaseFile = File("appDatabase.db")).build()
+        ).build()
 
         val userViewModelFactory = UserViewModelFactory(database)
 
@@ -29,8 +29,8 @@ class MainActivity : ComponentActivity() {
             WatchListTheme {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "main") {
-                    composable("main") { MainScreen(navController) }
-                    composable("input") { InputScreen(navController) }
+                    composable("main") { MainScreen(navController, userViewModel) }
+                    composable("input") { InputScreen(navController, userViewModel) }
                     composable("settings") { SettingsScreen(navController) }
                     composable("password") { PasswordScreen(navController) }
                     composable("login") { LoginScreen(navController) }

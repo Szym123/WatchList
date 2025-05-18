@@ -18,7 +18,7 @@ class UserViewModel(database: AppDatabase) : ViewModel() {
         allUsers = userDao.getAllUsers()
     }
 
-    /*fun insertUser(user: User) {
+    fun insertUser(user: User) {
         // Use viewModelScope to launch coroutine
         viewModelScope.launch(Dispatchers.IO) {
             userDao.insertUser(user)
@@ -29,7 +29,7 @@ class UserViewModel(database: AppDatabase) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             userDao.deleteUser(userId)
         }
-    }*/
+    }
 }
 
 // 5. ViewModel Factory

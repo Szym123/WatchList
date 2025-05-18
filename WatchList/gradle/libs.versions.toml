@@ -16,6 +16,8 @@ recyclerview = "1.4.0"
 navigation-fragment-ktx = "2.9.0"
 navigation-ui-ktx = "2.9.0"
 room = "2.7.1"
+runtimeLivedata = "1.8.1"
+compose-runtime = "1.6.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +43,8 @@ androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview"
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
 navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "compose-runtime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
