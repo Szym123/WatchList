@@ -40,6 +40,19 @@ android {
     }
 }
 
+kotlin {
+    sourceSets {
+        main {
+            kotlin.srcDir("src/main/kotlin") //redundant, but good to be explicit
+            resources.srcDir("src/main/resources") //redundant, but good to be explicit
+        }
+        test {
+            kotlin.srcDir("src/test/kotlin")  //redundant, but good to be explicit
+            resources.srcDir("src/test/resources") //redundant, but good to be explicit
+        }
+    }
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -66,4 +79,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodelcompose)
     kapt(libs.room.compiler)
     implementation(libs.compose.runtime.livedata)
+}
+
+kapt {
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }

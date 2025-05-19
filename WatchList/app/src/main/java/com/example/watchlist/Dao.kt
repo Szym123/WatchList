@@ -5,9 +5,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Entity
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import androidx.room.migration.Migration
+
 
 @Entity(tableName = "user_table")
 data class User(
@@ -15,7 +16,8 @@ data class User(
     @ColumnInfo(name = "Name") val name: String,
     @ColumnInfo(name = "AdditionalInfo") val additionalInfo: String,
     @ColumnInfo(name = "Description") val description: String,
-    @ColumnInfo(name = "IsLike") val isLike: Boolean
+    @ColumnInfo(name = "IsLike") val isLike: Boolean,
+    //@ColumnInfo(name = "Video") val video: String,
 )
 
 @Dao
@@ -29,3 +31,4 @@ interface UserDao {
     @Query("DELETE FROM user_table WHERE id = :userId")
     suspend fun deleteUser(userId: Int)
 }
+
