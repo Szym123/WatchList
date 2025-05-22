@@ -1,6 +1,9 @@
 package com.example.watchlist
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -16,8 +19,8 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
-
     val users by userViewModel.allUsers.observeAsState(emptyList())
+    val listState = rememberLazyListState()
 
     Scaffold(
         topBar = {
@@ -39,21 +42,34 @@ fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
             }
         }
     ) { padding ->
-        Column(
-            verticalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .fillMaxSize().verticalScroll(rememberScrollState())
-                .padding(padding),
+        Surface(
+            modifier = Modifier.fillMaxSize(),
         ) {
-            repeat(40) {
-                CardInList()
+            if (users.isEmpty()) {
+                // Show a message if the list is empty
+                Box(modifier = Modifier.fillMaxSize(),) {
+                    Text(text = "No users available.")
+                }
+
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
+                ) {
+                    items(users) { user ->
+                        CardInList(user = user)
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun CardInList() {
+fun CardInList(user: User) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -65,8 +81,8 @@ fun CardInList() {
         ){
             Text("XD")
             Column{
-                Text("Name")
-                Text("More info")
+                Text(user.name)
+                Text(user.additionalInfo)
             }
             Icon(
                 imageVector = Icons.Default.FavoriteBorder,

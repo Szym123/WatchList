@@ -7,8 +7,8 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [User::class],
-    version = 1,
-    //autoMigrations = [ AutoMigration (from = 1, to = 2) ],
+    version = 3,
+    autoMigrations = [ AutoMigration (from = 2, to = 3) ],
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {

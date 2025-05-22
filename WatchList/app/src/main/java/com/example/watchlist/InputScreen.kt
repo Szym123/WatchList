@@ -22,13 +22,15 @@ fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) 
     var additionalInfo by remember { mutableStateOf(TextFieldValue("")) }
     var description by remember { mutableStateOf(TextFieldValue("")) }
     var video by remember { mutableStateOf(TextFieldValue("")) }
+    var image by remember { mutableStateOf(TextFieldValue("")) }
 
     val newUser = User(
         name = name.text,
         additionalInfo = additionalInfo.text,
         description = description.text,
         isLike = false,
-        //video = video.text
+        video = video.text,
+        image = image.text
     )
 
     Scaffold(
@@ -90,15 +92,6 @@ fun CardWithPhoto() {
             .padding(5.dp)
     ) {
         Text("Name")
-        FloatingActionButton(
-            modifier = Modifier
-                .padding(5.dp),
-            onClick = {  }
-        ){
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add"
-            )
-        }
+
     }
 }

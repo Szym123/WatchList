@@ -17,7 +17,8 @@ data class User(
     @ColumnInfo(name = "AdditionalInfo") val additionalInfo: String,
     @ColumnInfo(name = "Description") val description: String,
     @ColumnInfo(name = "IsLike") val isLike: Boolean,
-    //@ColumnInfo(name = "Video") val video: String,
+    @ColumnInfo(name = "Video") val video: String,
+    @ColumnInfo(name = "Image") val image: String?,
 )
 
 @Dao
