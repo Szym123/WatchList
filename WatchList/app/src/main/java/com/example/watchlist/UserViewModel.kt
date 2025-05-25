@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class UserViewModel(database: AppDatabase) : ViewModel() {
@@ -27,6 +28,12 @@ class UserViewModel(database: AppDatabase) : ViewModel() {
     fun deleteUser(userId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             userDao.deleteUser(userId)
+        }
+    }
+
+    suspend fun getUserById(userId: Int): User? {
+        return withContext(Dispatchers.IO) {
+            userDao.getUserById(userId)
         }
     }
 }

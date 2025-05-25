@@ -16,6 +16,8 @@ runtimeLivedata = "1.8.2"
 compose-runtime = "1.8.2"
 android-image-cropper = "4.5.0"
 androidxActivityKtx = "1.10.1"
+coil = "2.6.0"
+androidYoutubePlayer = "12.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +43,8 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "compose-runtime" }
 vanniktech-android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "android-image-cropper" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidxActivityKtx" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+android-youtube-player-core = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "androidYoutubePlayer" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

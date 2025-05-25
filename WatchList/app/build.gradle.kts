@@ -82,6 +82,8 @@ dependencies {
     implementation(libs.vanniktech.android.image.cropper)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.android.youtube.player.core)
 }
 
 kapt {

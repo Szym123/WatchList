@@ -1,5 +1,7 @@
 package com.example.watchlist
 
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,9 +14,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 
 @Composable
 fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
@@ -52,9 +57,13 @@ fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
                     .fillMaxWidth()
                     .height(20.dp)
                 ){
-                    Text(
-                        text="NO"
-                    )
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text("No movies added", style = MaterialTheme.typography.titleLarge)
+                    }
                 }
 
             } else {
@@ -65,7 +74,7 @@ fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
                     verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     items(users) { user ->
-                        CardInList(user = user)
+                        CardInList(user,navController)
                     }
                 }
             }
@@ -74,7 +83,7 @@ fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
 }
 
 @Composable
-fun CardInList(user: User) {
+fun CardInList(user: User, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,23 +92,53 @@ fun CardInList(user: User) {
     ) {
         Row(
             modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+            horizontalArrangement = Arrangement.End
         ){
-            Text("XD")
-            Column{
-                Text(user.name)
-                Text(user.additionalInfo)
+            Card(
+                modifier = Modifier
+                    .weight(2f)
+                    .fillMaxHeight()
+                    .clickable{ navController.navigate("input") },
+            ) {
+                if (Uri.parse(user.image) == null) {
+                    Text("No")
+                } else {
+                    AsyncImage(
+                        model = Uri.parse(user.image),
+                        contentDescription = "Selected Image",
+                        modifier = Modifier
+                            .fillMaxSize(), // Image fills the card
+                        contentScale = ContentScale.Crop // Crop to fill the bounds
+                    )
+                }
             }
-            if (user.isLike) {
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = "Is Liked"
-                )
-            } else{
-                Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "Is not Liked"
-                )
+            Column(
+                modifier = Modifier
+                    .weight(4f)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
+            ){
+                Text(user.name, style = MaterialTheme.typography.titleMedium)
+                Text(user.additionalInfo, style = MaterialTheme.typography.bodyMedium)
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (user.isLike) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "Is Liked"
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = "Is not Liked"
+                    )
+                }
             }
         }
     }

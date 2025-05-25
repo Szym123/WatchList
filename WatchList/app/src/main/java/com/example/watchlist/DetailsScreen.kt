@@ -40,6 +40,7 @@ fun DetailsScreen(navController: NavHostController) {
             Text("Name")
             Text("SubName")
             Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu risus justo. Ut viverra mi quis nunc suscipit, quis eleifend eros condimentum. Nunc faucibus nulla dolor, et consectetur eros porttitor a. Donec gravida, mauris eu condimentum malesuada, lectus dolor lacinia nunc, ut semper lacus tellus ut dolor. Vestibulum id ultricies lacus. Aenean vitae consequat lectus. Sed ac aliquet nulla.")
+            LiveTvScreen("MqvQiexh42w")
         }
     }
 }
