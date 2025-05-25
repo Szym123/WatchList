@@ -4,10 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -43,21 +42,27 @@ fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
         }
     ) { padding ->
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
         ) {
             if (users.isEmpty()) {
-                // Show a message if the list is empty
-                Box(modifier = Modifier.fillMaxSize(),) {
-                    Text(text = "No users available.")
+                Card(
+                    modifier = Modifier
+                    .fillMaxWidth()
+                    .height(20.dp)
+                ){
+                    Text(
+                        text="NO"
+                    )
                 }
 
             } else {
                 LazyColumn(
                     state = listState,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     items(users) { user ->
                         CardInList(user = user)
@@ -77,17 +82,25 @@ fun CardInList(user: User) {
             .padding(5.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+            .fillMaxSize()
         ){
             Text("XD")
             Column{
                 Text(user.name)
                 Text(user.additionalInfo)
             }
-            Icon(
-                imageVector = Icons.Default.FavoriteBorder,
-                contentDescription = "Add"
-            )
+            if (user.isLike) {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "Is Liked"
+                )
+            } else{
+                Icon(
+                    imageVector = Icons.Default.FavoriteBorder,
+                    contentDescription = "Is not Liked"
+                )
+            }
         }
     }
 }

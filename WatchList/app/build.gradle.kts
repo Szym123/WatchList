@@ -79,6 +79,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodelcompose)
     kapt(libs.room.compiler)
     implementation(libs.compose.runtime.livedata)
+    implementation(libs.vanniktech.android.image.cropper)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.activity.compose)
 }
 
 kapt {

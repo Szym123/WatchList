@@ -1,6 +1,5 @@
 [versions]
 agp = "8.9.3" # Last stable version before significant API level changes
-daggerCompiler = "2.51.1"
 kotlin = "2.0.21" # Good stable version for this AGP
 coreKtx = "1.16.0" # Matches well with older Android versions
 junit = "4.13.2" # Generally stable and compatible
@@ -8,21 +7,19 @@ junitVersion = "1.2.1" # Older version that's likely compatible
 espressoCore = "3.6.1" # Known to work well with older support libraries
 lifecycleRuntimeKtx = "2.9.0" # Stable version for older Android
 activityCompose = "1.10.1" # First stable version of Compose Activity, might be too new; consider androidx.activity:activity-ktx:1.2.4 if issues arise
-composeBom = "2025.05.00" # Older BOM aligning with the Activity Compose version
+composeBom = "2025.05.01" # Older BOM aligning with the Activity Compose version
 navigationCompose = "2.9.0" # Stable version for this Compose version
 roomVersion = "2.7.1" # Good stable version for this era
-runtimeLint = "1.8.1" # Matches the older support library versions
-recyclerview = "1.4.0"
-navigation-fragment-ktx = "2.9.0"
-navigation-ui-ktx = "2.9.0"
+runtimeLint = "1.8.2" # Matches the older support library versions
 room = "2.7.1"
-runtimeLivedata = "1.8.1"
-compose-runtime = "1.6.5"
+runtimeLivedata = "1.8.2"
+compose-runtime = "1.8.2"
+android-image-cropper = "4.5.0"
+androidxActivityKtx = "1.10.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -39,12 +36,11 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-runtime-lint = { group = "androidx.compose.runtime", name = "runtime-lint", version.ref = "runtimeLint" }
-androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "compose-runtime" }
+vanniktech-android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "android-image-cropper" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidxActivityKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
