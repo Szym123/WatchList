@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,14 +26,42 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) {
+    var id: Int? = null
+    navController.previousBackStackEntry?.savedStateHandle?.get<String>(key = "id")?.let {
+        id = it.toInt() -8
+    }
+
     var name by remember { mutableStateOf(TextFieldValue("")) }
     var additionalInfo by remember { mutableStateOf(TextFieldValue("")) }
     var description by remember { mutableStateOf(TextFieldValue("")) }
     var video by remember { mutableStateOf(TextFieldValue("")) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+// Observe all users and update fields if an ID is present
+    val users by userViewModel.allUsers.observeAsState(emptyList())
+
+// Use LaunchedEffect to react to changes in 'id' and 'users'
+    LaunchedEffect(id, users) {
+        if (id != null && id!! >= 0 && id!! < users.size) { // Add bounds check
+            val user = users[id!!]
+            name = TextFieldValue(user.name)
+            additionalInfo = TextFieldValue(user.additionalInfo)
+            description = TextFieldValue(user.description)
+            video = TextFieldValue(user.video)
+            imageUri = Uri.parse(user.image)
+        } else {
+            // Optionally, clear fields if ID is null or out of bounds
+            name = TextFieldValue("")
+            additionalInfo = TextFieldValue("")
+            description = TextFieldValue("")
+            video = TextFieldValue("")
+            imageUri = null
+        }
+    }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -66,6 +95,8 @@ fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) 
         bottomBar = { BottomAppBarEx(
             userViewModel,
             newUser,
+            id,
+            navController,
             {photoPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))}
             )
         }
@@ -76,6 +107,10 @@ fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) 
                 .padding(padding),
         ) {
             CardWithPhoto(imageUri)
+            Text(
+                id.toString(),
+                style = MaterialTheme.typography.bodyMedium
+            )
             SimpleFilledTextFieldSample("Add title",70,value = name,onValueChange = { name = it })
             SimpleFilledTextFieldSample("Add subtitle",70,value = additionalInfo,onValueChange = { additionalInfo = it })
             SimpleFilledTextFieldSample("Add descryption",175,value = description,onValueChange = { description = it })
@@ -132,15 +167,23 @@ fun CardWithPhoto(imageUri: Uri?) {
 }
 
 @Composable
-fun BottomAppBarEx(userViewModel: UserViewModel, newUser: User, onClick: () -> Unit) {
+fun BottomAppBarEx(userViewModel: UserViewModel, newUser: User, id: Int?, navController: NavHostController, onClick: () -> Unit) {
     val openAlertDialog = remember { mutableStateOf(false) }
 
     BottomAppBar(
         actions = {
-            IconButton(onClick = { userViewModel.insertUser(newUser) }) {
+            IconButton(onClick = {
+                userViewModel.insertUser(newUser)
+                navController.popBackStack()
+            }) {
                 Icon(Icons.Filled.Check, contentDescription = "Save")
             }
-            IconButton(onClick = {}) {
+            IconButton(onClick = {
+                if (id != null) {
+                    userViewModel.deleteUser(id)
+                    navController.popBackStack()
+                }
+            }) {
                 Icon(
                     Icons.Filled.Delete,
                     contentDescription = "Delete",

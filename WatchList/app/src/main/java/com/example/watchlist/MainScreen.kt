@@ -14,9 +14,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -74,7 +79,7 @@ fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
                     verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     items(users) { user ->
-                        CardInList(user,navController)
+                        CardInList(userViewModel, user, navController)
                     }
                 }
             }
@@ -83,7 +88,9 @@ fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
 }
 
 @Composable
-fun CardInList(user: User, navController: NavHostController) {
+fun CardInList(userViewModel: UserViewModel, user: User, navController: NavHostController) {
+    var isLike by remember { mutableStateOf<Boolean>(user.isLike) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -99,28 +106,35 @@ fun CardInList(user: User, navController: NavHostController) {
                 modifier = Modifier
                     .weight(2f)
                     .fillMaxHeight()
-                    .clickable{ navController.navigate("input") },
+                    .clickable{
+                        navController.currentBackStackEntry?.savedStateHandle?.set("id", user.id.toString())
+                        navController.navigate("input")
+                    },
+                colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
             ) {
-                if (Uri.parse(user.image) == null) {
-                    Text("No")
-                } else {
-                    AsyncImage(
-                        model = Uri.parse(user.image),
-                        contentDescription = "Selected Image",
-                        modifier = Modifier
-                            .fillMaxSize(), // Image fills the card
-                        contentScale = ContentScale.Crop // Crop to fill the bounds
-                    )
-                }
+                AsyncImage(
+                    model = Uri.parse(user.image),
+                    contentDescription = "Selected Image",
+                    modifier = Modifier
+                        .fillMaxSize(), // Image fills the card
+                    contentScale = ContentScale.Crop // Crop to fill the bounds
+                )
             }
             Column(
                 modifier = Modifier
                     .weight(4f)
+                    .padding(8.dp)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ){
-                Text(user.name, style = MaterialTheme.typography.titleMedium)
-                Text(user.additionalInfo, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    user.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    user.id.toString(),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
             Column(
                 modifier = Modifier
@@ -128,16 +142,28 @@ fun CardInList(user: User, navController: NavHostController) {
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
-                if (user.isLike) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Is Liked"
-                    )
+                if (isLike) {
+                    IconButton(onClick = {
+                        user.isLike = false
+                        isLike = false
+                        userViewModel.update(user)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "Is Liked"
+                        )
+                    }
                 } else {
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Is not Liked"
-                    )
+                    IconButton(onClick = {
+                        user.isLike = true
+                        isLike = true
+                        userViewModel.update(user)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = "Is not Liked"
+                        )
+                    }
                 }
             }
         }

@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -12,10 +14,12 @@ import kotlinx.coroutines.withContext
 class UserViewModel(database: AppDatabase) : ViewModel() {
     val userDao: UserDao
     val allUsers: LiveData<List<User>>
+    val maxUserId: LiveData<Long?>
 
     init {
         userDao = database.userDao()
         allUsers = userDao.getAllUsers()
+        maxUserId = userDao.getMaxId()
     }
 
     fun insertUser(user: User) {
@@ -25,14 +29,20 @@ class UserViewModel(database: AppDatabase) : ViewModel() {
         }
     }
 
+    fun update(user: User) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userDao.updateUser(user) // This is the "overwrite" operation
+        }
+    }
+
     fun deleteUser(userId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             userDao.deleteUser(userId)
         }
     }
 
-    suspend fun getUserById(userId: Int): User? {
-        return withContext(Dispatchers.IO) {
+    fun getUserById(userId: Int): Deferred<User?> {
+        return viewModelScope.async(Dispatchers.IO) {
             userDao.getUserById(userId)
         }
     }
