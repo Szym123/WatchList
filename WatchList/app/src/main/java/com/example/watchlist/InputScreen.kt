@@ -10,7 +10,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +32,7 @@ import androidx.core.net.toUri
 fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) {
     var id: Int? = null
     navController.previousBackStackEntry?.savedStateHandle?.get<String>(key = "id")?.let {
-        id = it.toInt()-1
+        id = it.toInt()
     }
 
     var name by remember { mutableStateOf(TextFieldValue("")) }
@@ -54,12 +53,6 @@ fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) 
             description = TextFieldValue(user.description)
             video = TextFieldValue(user.video)
             imageUri = user.image!!.toUri()
-        } else {
-            name = TextFieldValue("")
-            additionalInfo = TextFieldValue("")
-            description = TextFieldValue("")
-            video = TextFieldValue("")
-            imageUri = null
         }
     }
 
@@ -106,10 +99,6 @@ fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) 
                 .padding(padding),
         ) {
             CardWithPhoto(imageUri)
-            Text(
-                id.toString(),
-                style = MaterialTheme.typography.bodyMedium
-            )
             SimpleFilledTextFieldSample("Add title",70,value = name,onValueChange = { name = it })
             SimpleFilledTextFieldSample("Add subtitle",70,value = additionalInfo,onValueChange = { additionalInfo = it })
             SimpleFilledTextFieldSample("Add descryption",175,value = description,onValueChange = { description = it })
@@ -167,24 +156,19 @@ fun CardWithPhoto(imageUri: Uri?) {
 
 @Composable
 fun BottomAppBarEx(userViewModel: UserViewModel, newUser: User, id: Int?, navController: NavHostController, onClick: () -> Unit) {
+
     BottomAppBar(
         actions = {
             IconButton(onClick = {
-                userViewModel.insertUser(newUser)
-                navController.popBackStack()
-            }) {
-                Icon(Icons.Filled.Check, contentDescription = "Save")
-            }
-            IconButton(onClick = {
-                if (id != null) {
-                    userViewModel.deleteUser(id+1)
+                if (id == null) {
+                    userViewModel.insertUser(newUser)
+                    navController.popBackStack()
+                } else{
+                    userViewModel.updateUserById(id.toLong(),newUser)
                     navController.popBackStack()
                 }
             }) {
-                Icon(
-                    Icons.Filled.Delete,
-                    contentDescription = "Delete",
-                )
+                Icon(Icons.Filled.Check, contentDescription = "Save")
             }
             IconButton(onClick = onClick) {
                 Icon(

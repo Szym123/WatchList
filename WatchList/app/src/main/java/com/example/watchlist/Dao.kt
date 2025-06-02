@@ -46,5 +46,19 @@ interface UserDao {
 
     @Query("DELETE FROM sqlite_sequence WHERE name = 'user_table'")
     suspend fun deletePrimaryKeyIndex()
+
+    @Query("UPDATE user_table SET IsLike = :isLike WHERE id = :userId")
+    suspend fun updateUserLikeById(userId: Long, isLike: Boolean)
+
+    @Query("UPDATE user_table SET Name = :name ,AdditionalInfo = :additionalInfo ,Description = :description ,IsLike = :isLiked ,Video = :video ,Image = :image WHERE id = :userId")
+    suspend fun updateUserById(
+        userId: Long,
+        name: String,
+        additionalInfo: String,
+        description: String,
+        isLiked: Boolean,
+        video: String,
+        image: String?
+    )
 }
 

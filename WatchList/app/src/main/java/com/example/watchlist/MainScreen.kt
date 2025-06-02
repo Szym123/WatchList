@@ -39,6 +39,7 @@ fun MainScreen(navController: NavHostController, userViewModel: UserViewModel) {
             )
         },
         bottomBar = {
+            navController.currentBackStackEntry?.savedStateHandle?.set("id", null)
             AppNavigationBar(navController)
         },
         floatingActionButton = {
@@ -106,7 +107,7 @@ fun CardInList(userViewModel: UserViewModel, user: User, navController: NavHostC
                     .weight(2f)
                     .fillMaxHeight()
                     .clickable{
-                        navController.currentBackStackEntry?.savedStateHandle?.set("id", user.id.toString())
+                        navController.currentBackStackEntry?.savedStateHandle?.set("id", (user.id.toInt()-1).toString())
                         navController.navigate("input")
                     },
                 colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
@@ -131,7 +132,7 @@ fun CardInList(userViewModel: UserViewModel, user: User, navController: NavHostC
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    user.id.toString(),
+                    user.additionalInfo,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

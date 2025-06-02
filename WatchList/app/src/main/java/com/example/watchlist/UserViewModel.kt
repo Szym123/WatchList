@@ -53,6 +53,26 @@ class UserViewModel(database: AppDatabase) : ViewModel() {
             userDao.deletePrimaryKeyIndex()
         }
     }
+
+    fun updateUserLikeById(userId: Long, currentLikeStatus: Boolean) {
+        viewModelScope.launch {
+            userDao.updateUserLikeById(userId, !currentLikeStatus)
+        }
+    }
+
+    fun updateUserById(userId: Long, user: User) {
+        viewModelScope.launch {
+            userDao.updateUserById(
+                userId + 1,
+                user.name,
+                user.additionalInfo,
+                user.description,
+                user.isLike,
+                user.video,
+                user.image
+            )
+        }
+    }
 }
 
 // 5. ViewModel Factory
