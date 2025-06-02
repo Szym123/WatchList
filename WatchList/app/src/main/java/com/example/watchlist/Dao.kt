@@ -9,8 +9,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Update
-import androidx.room.migration.Migration
-
 
 @Entity(tableName = "user_table")
 data class User(
@@ -42,5 +40,11 @@ interface UserDao {
 
     @Query("SELECT MAX(id) FROM user_table")
     fun getMaxId(): LiveData<Long?>
+
+    @Query("DELETE FROM user_table")
+    suspend fun deleteAll()
+
+    @Query("DELETE FROM sqlite_sequence WHERE name = 'user_table'")
+    suspend fun deletePrimaryKeyIndex()
 }
 

@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = "main") {
                     composable("main") { MainScreen(navController, userViewModel) }
                     composable("input") { InputScreen(navController, userViewModel) }
-                    composable("settings") { SettingsScreen(navController) }
+                    composable("settings") { SettingsScreen(navController, userViewModel) }
                     composable("password") { PasswordScreen(navController) }
                     composable("login") { LoginScreen(navController) }
                     composable("details") { DetailsScreen(navController) }

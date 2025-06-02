@@ -27,12 +27,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import androidx.compose.runtime.LaunchedEffect
+import androidx.core.net.toUri
 
 @Composable
 fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) {
     var id: Int? = null
     navController.previousBackStackEntry?.savedStateHandle?.get<String>(key = "id")?.let {
-        id = it.toInt() -8
+        id = it.toInt()-1
     }
 
     var name by remember { mutableStateOf(TextFieldValue("")) }
@@ -46,15 +47,14 @@ fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) 
 
 // Use LaunchedEffect to react to changes in 'id' and 'users'
     LaunchedEffect(id, users) {
-        if (id != null && id!! >= 0 && id!! < users.size) { // Add bounds check
+        if (id != null && id!! >= 0 && id!! < users.size) {
             val user = users[id!!]
             name = TextFieldValue(user.name)
             additionalInfo = TextFieldValue(user.additionalInfo)
             description = TextFieldValue(user.description)
             video = TextFieldValue(user.video)
-            imageUri = Uri.parse(user.image)
+            imageUri = user.image!!.toUri()
         } else {
-            // Optionally, clear fields if ID is null or out of bounds
             name = TextFieldValue("")
             additionalInfo = TextFieldValue("")
             description = TextFieldValue("")
@@ -97,8 +97,7 @@ fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) 
             newUser,
             id,
             navController,
-            {photoPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))}
-            )
+            ){photoPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))}
         }
     ) { padding ->
         Column(
@@ -168,8 +167,6 @@ fun CardWithPhoto(imageUri: Uri?) {
 
 @Composable
 fun BottomAppBarEx(userViewModel: UserViewModel, newUser: User, id: Int?, navController: NavHostController, onClick: () -> Unit) {
-    val openAlertDialog = remember { mutableStateOf(false) }
-
     BottomAppBar(
         actions = {
             IconButton(onClick = {
@@ -180,7 +177,7 @@ fun BottomAppBarEx(userViewModel: UserViewModel, newUser: User, id: Int?, navCon
             }
             IconButton(onClick = {
                 if (id != null) {
-                    userViewModel.deleteUser(id)
+                    userViewModel.deleteUser(id+1)
                     navController.popBackStack()
                 }
             }) {

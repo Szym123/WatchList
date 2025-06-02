@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun SettingsScreen(navController: NavHostController) {
+fun SettingsScreen(navController: NavHostController, userViewModel: UserViewModel) {
     Scaffold(
         topBar = {
             AppTopBar(
@@ -38,6 +38,15 @@ fun SettingsScreen(navController: NavHostController) {
                     .height(70.dp)
             ) {
                 Text("Changing the password")
+            }
+            Button(
+                onClick = { userViewModel.deleteAll() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .padding(5.dp)
+            ) {
+                Text("Delete all users")
             }
             CardWithSwitch()
         }

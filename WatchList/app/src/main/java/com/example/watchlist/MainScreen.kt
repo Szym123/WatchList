@@ -1,6 +1,5 @@
 package com.example.watchlist
 
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 
@@ -113,7 +112,7 @@ fun CardInList(userViewModel: UserViewModel, user: User, navController: NavHostC
                 colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
             ) {
                 AsyncImage(
-                    model = Uri.parse(user.image),
+                    model = user.image!!.toUri(),
                     contentDescription = "Selected Image",
                     modifier = Modifier
                         .fillMaxSize(), // Image fills the card

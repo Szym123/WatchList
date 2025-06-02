@@ -46,6 +46,13 @@ class UserViewModel(database: AppDatabase) : ViewModel() {
             userDao.getUserById(userId)
         }
     }
+
+    fun deleteAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            userDao.deleteAll()
+            userDao.deletePrimaryKeyIndex()
+        }
+    }
 }
 
 // 5. ViewModel Factory
