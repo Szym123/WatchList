@@ -72,13 +72,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     // added by Dalmatia
     // Room Database
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler.v261)
+    implementation(libs.androidx.room.ktx)
     // Bcrypt (jBCrypt)
-    implementation("org.mindrot:jbcrypt:0.4")
+    implementation(libs.jbcrypt)
     // Biometrics
-    implementation("androidx.biometric:biometric:1.2.0-alpha05")
+    implementation(libs.androidx.biometric)
 }
 
 dependencies {
