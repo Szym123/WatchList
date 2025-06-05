@@ -8,9 +8,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+
 
 @Composable
 fun SettingsScreen(navController: NavHostController, userViewModel: UserViewModel) {
@@ -55,7 +60,8 @@ fun SettingsScreen(navController: NavHostController, userViewModel: UserViewMode
 
 @Composable
 fun CardWithSwitch() {
-    var checked by remember { mutableStateOf(true) }
+    val navController = rememberNavController()
+    var checked by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -64,15 +70,30 @@ fun CardWithSwitch() {
             .padding(5.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxSize()
-        ){
-            Text("Test")
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
             Switch(
                 checked = checked,
                 onCheckedChange = {
                     checked = it
+                    if (it) { // tylko gdy przełącznik jest włączany (checked = true)
+                        navController.navigate("password") // zastąp swoją trasą docelową
+                    }
                 }
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = "ENABLE YOUR PASSWORD",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.W500
             )
         }
     }
 }
+
+//TO DO:
+//1.naprawić ten holerny błąd który sprawia że wszystko się zamyka po kliknięciu
+//w przełącznik
+//2. stworzyć mechanizm sprawdzający i pamiętający czy hasło jest uruchomione
