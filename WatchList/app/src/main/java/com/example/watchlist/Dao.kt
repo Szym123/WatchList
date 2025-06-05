@@ -25,7 +25,6 @@ data class User(
 @Entity(tableName = "user_credentials")
 data class UserCredentials(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @ColumnInfo(name = "user_id") val userId: Long, // Powiązanie z user_table
     @ColumnInfo(name = "username") val username: String,
     @ColumnInfo(name = "password_hash") val passwordHash: String
 )
