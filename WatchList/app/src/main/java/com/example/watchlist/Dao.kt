@@ -10,10 +10,12 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Update
 
+// Drogi Kolego, przebacz mi ale musze tu dodać miejsce na haslo
 @Entity(tableName = "user_table")
 data class User(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "Name") val name: String,
+    @ColumnInfo(name = "Password") val password: String,
     @ColumnInfo(name = "AdditionalInfo") val additionalInfo: String,
     @ColumnInfo(name = "Description") val description: String,
     @ColumnInfo(name = "IsLike") var isLike: Boolean,
@@ -60,5 +62,14 @@ interface UserDao {
         video: String,
         image: String?
     )
-}
 
+    // Checkin if user with given name exists
+    @Query("SELECT * FROM user_table WHERE name = :username")
+    suspend fun getUserByUsername(username: String): User?
+
+    // actualization username and password
+    @Query("UPDATE user_table SET password = :passwordHash WHERE name = :username")
+    suspend fun updateUserCredentials(username: String, passwordHash: String)
+
+}
+// TO DO: DODAWANIE USERNAME I PASSWORD DO BAZY DANYCH
