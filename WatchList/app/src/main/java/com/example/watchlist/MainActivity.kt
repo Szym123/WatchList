@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
 
             WatchListTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "main") {
+                NavHost(navController = navController, startDestination = "settings") {
                     composable("main") { MainScreen(navController, userViewModel) }
                     composable("input") { InputScreen(navController, userViewModel) }
                     composable("settings") { SettingsScreen(navController, userViewModel) }

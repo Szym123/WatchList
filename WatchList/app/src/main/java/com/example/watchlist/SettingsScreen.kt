@@ -37,7 +37,7 @@ fun SettingsScreen(navController: NavHostController, userViewModel: UserViewMode
                     .fillMaxWidth()
                     .height(70.dp)
             ) {
-                Text("Changing the password")
+                Text("Change the password")
             }
             Button(
                 onClick = { userViewModel.deleteAll() },
