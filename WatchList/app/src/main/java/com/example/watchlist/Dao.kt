@@ -10,17 +10,24 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Update
 
-// Drogi Kolego, przebacz mi ale musze tu dodać miejsce na haslo
 @Entity(tableName = "user_table")
 data class User(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "Name") val name: String,
-    @ColumnInfo(name = "Password") val password: String,
     @ColumnInfo(name = "AdditionalInfo") val additionalInfo: String,
     @ColumnInfo(name = "Description") val description: String,
     @ColumnInfo(name = "IsLike") var isLike: Boolean,
     @ColumnInfo(name = "Video") val video: String,
     @ColumnInfo(name = "Image") val image: String?,
+)
+
+
+@Entity(tableName = "user_credentials")
+data class UserCredentials(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @ColumnInfo(name = "user_id") val userId: Long, // Powiązanie z user_table
+    @ColumnInfo(name = "username") val username: String,
+    @ColumnInfo(name = "password_hash") val passwordHash: String
 )
 
 @Dao
@@ -62,14 +69,14 @@ interface UserDao {
         video: String,
         image: String?
     )
+}
 
-    // Checkin if user with given name exists
-    @Query("SELECT * FROM user_table WHERE name = :username")
-    suspend fun getUserByUsername(username: String): User?
+@Dao
+interface UserCredentialsDao {
+    @Insert
+    suspend fun insertCredentials(credentials: UserCredentials)
 
-    // actualization username and password
-    @Query("UPDATE user_table SET password = :passwordHash WHERE name = :username")
-    suspend fun updateUserCredentials(username: String, passwordHash: String)
-
+    @Query("SELECT * FROM user_credentials WHERE username = :username")
+    suspend fun getCredentials(username: String): UserCredentials?
 }
 // TO DO: DODAWANIE USERNAME I PASSWORD DO BAZY DANYCH
