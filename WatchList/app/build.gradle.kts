@@ -79,6 +79,9 @@ dependencies {
     implementation(libs.jbcrypt)
     // Biometrics
     implementation(libs.androidx.biometric)
+    implementation(libs.androidx.datastore.preferences)
+
+
 }
 
 dependencies {
@@ -93,6 +96,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.coil.compose)
     implementation(libs.android.youtube.player.core)
+
 }
 
 kapt {

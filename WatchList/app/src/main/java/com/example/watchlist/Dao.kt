@@ -25,7 +25,7 @@ data class User(
 @Entity(tableName = "user_credentials")
 data class UserCredentials(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @ColumnInfo(name = "username") val username: String,
+    @ColumnInfo(name = "enabled") val enabled: Boolean,
     @ColumnInfo(name = "password_hash") val passwordHash: String
 )
 
@@ -72,10 +72,16 @@ interface UserDao {
 
 @Dao
 interface UserCredentialsDao {
-    @Insert
-    suspend fun insertCredentials(credentials: UserCredentials)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPass(credentials: UserCredentials) // Zmieniono nazwę na bardziej opisową
 
-    @Query("SELECT * FROM user_credentials WHERE username = :username")
-    suspend fun getCredentials(username: String): UserCredentials?
+    @Update
+    suspend fun updatePass(credentials: UserCredentials) // Zmieniono nazwę na bardziej opisową
+
+    @Query("DELETE FROM user_credentials WHERE id = :id")
+    suspend fun deletePass(id: Int)
+
+    @Query("SELECT password_hash FROM user_credentials WHERE id = :id")
+    suspend fun getPass(id: Int): String
 }
-// TO DO: DODAWANIE USERNAME I PASSWORD DO BAZY DANYCH
+// TO DO: haszowanie i ogólnie obsługa na frontendzie
