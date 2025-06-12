@@ -73,10 +73,10 @@ interface UserDao {
 @Dao
 interface UserCredentialsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPass(credentials: UserCredentials) // Zmieniono nazwę na bardziej opisową
+    suspend fun insertPass(credentials: UserCredentials)
 
     @Update
-    suspend fun updatePass(credentials: UserCredentials) // Zmieniono nazwę na bardziej opisową
+    suspend fun updatePass(credentials: UserCredentials)
 
     @Query("DELETE FROM user_credentials WHERE id = :id")
     suspend fun deletePass(id: Int)

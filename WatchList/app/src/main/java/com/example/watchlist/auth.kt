@@ -11,7 +11,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class AuthViewModel(database: AppDatabase2) : ViewModel() {
     val UserCredentials: UserCredentialsDao
 
@@ -19,16 +18,16 @@ class AuthViewModel(database: AppDatabase2) : ViewModel() {
         UserCredentials = database.UserCredentialsDao()
     }
 
-    fun insertUser(password: String) {
+    fun insertUser(kredki: UserCredentials) {
         // Use viewModelScope to launch coroutine
         viewModelScope.launch(Dispatchers.IO) {
-            UserCredentials.insertPass(true, passwordHash = password)
+            UserCredentials.insertPass(kredki)
         }
     }
 
-    fun update(enDis: Boolean,password: String) {
+    fun update(kredki: UserCredentials) {
         viewModelScope.launch(Dispatchers.IO) {
-            UserCredentials.updatePass(enabled = enDis, passwordHash = password) // This is the "overwrite" operation
+            UserCredentials.updatePass(kredki)
         }
     }
 
