@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,9 +52,29 @@ class MainActivity : ComponentActivity() {
 fun NavigationGraph(
     navController: NavHostController,
     userViewModel: UserViewModel,
+    authViewModel: AuthViewModel,
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit
 ) {
+    // state for dynamic startDestination
+    var startDestination by remember { mutableStateOf<String?>(null) }
+    // detecting if password is and if is enabled
+    LaunchedEffect(Unit) {
+        val credentials = authViewModel.getCredentials() // taking kredki from database ;)
+        startDestination = if (credentials != null) {
+            if (credentials.enabled && credentials.passwordHash != null) {
+                "login"
+            } else if (credentials.enabled && credentials.passwordHash == null) {
+                "password"
+            } else {
+                "main"
+            }
+        } else {
+            // if there is no record in database, it means that it is main time
+            "main"
+        }
+    }
+
     NavHost(navController = navController, startDestination = "settings") {
         composable("settings") {
             SettingsScreen(

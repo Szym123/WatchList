@@ -1,46 +1,56 @@
 package com.example.watchlist
-
-
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import at.favre.lib.bytes.Bytes
+import at.favre.lib.crypto.bcrypt.BCrypt
 import kotlinx.coroutines.withContext
+import java.security.SecureRandom
 
 class AuthViewModel(database: AppDatabase2) : ViewModel() {
-    val UserCredentials: UserCredentialsDao
+    val UserCredentialsDao: UserCredentialsDao
 
     init {
-        UserCredentials = database.UserCredentialsDao()
+        UserCredentialsDao = database.UserCredentialsDao()
+    }
+    private val secureRandom = SecureRandom() // salt
+
+    suspend fun hashPassword(password: String): Pair<String, String> = withContext(Dispatchers.Default) {
+        // in bcrypt salt is "inside" hash (there is no need to keep salt eny where else)
+        val saltBytes = Bytes.random(16, secureRandom).array() // salt generating
+        val hashedPassword = BCrypt.with(secureRandom).hashToString(12, password.toCharArray()) // hashing passwd with salt
+        return@withContext Pair(hashedPassword, "")
     }
 
-    fun insertUser(kredki: UserCredentials) {
-        // Use viewModelScope to launch coroutine
+    suspend fun checkPassword(password: String, hashedPasswordFromDb: String): Boolean = withContext(Dispatchers.Default) {
+        val result = BCrypt.verifyer().verify(password.toCharArray(), hashedPasswordFromDb.toCharArray())
+        return@withContext result.verified
+    }
+
+    suspend fun getCredentials(): UserCredentials? = withContext(Dispatchers.IO) {
+        // Musisz zaktualizować UserCredentialsDao o tę metodę
+        UserCredentialsDao.getCredentialsById(1)
+    }
+
+    suspend fun updateCredentials(credentials: UserCredentials) {
+        // co to robi?????????????????????????????????
         viewModelScope.launch(Dispatchers.IO) {
-            UserCredentials.insertPass(kredki)
+            UserCredentialsDao.updatePass(credentials)
         }
     }
 
-    fun update(kredki: UserCredentials) {
+    suspend fun insertOrUpdateCredentials(enabled: Boolean, passwordHash: String?) {
         viewModelScope.launch(Dispatchers.IO) {
-            UserCredentials.updatePass(kredki)
+            val existingCredentials = UserCredentialsDao.getCredentialsById(1)
+            if (existingCredentials == null) {
+                UserCredentialsDao.insertPass(UserCredentials(id = 1, enabled = enabled, passwordHash = passwordHash))
+            } else {
+                UserCredentialsDao.updatePass(existingCredentials.copy(enabled = enabled, passwordHash = passwordHash))
+            }
         }
-    }
-
-    fun deleteUser(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            UserCredentials.deletePass(id)
-        }
-    }
-
-    suspend fun getPassById(id: Int): String {
-        return viewModelScope.async(Dispatchers.IO) {
-            UserCredentials.getPass(id)
-        }.await()
     }
 
 }

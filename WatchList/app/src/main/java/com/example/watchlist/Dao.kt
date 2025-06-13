@@ -24,10 +24,11 @@ data class User(
 
 @Entity(tableName = "user_credentials")
 data class UserCredentials(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @ColumnInfo(name = "enabled") val enabled: Boolean,
-    @ColumnInfo(name = "password_hash") val passwordHash: String
+    @PrimaryKey val id: Int = 1,
+    @ColumnInfo(name = "enabled") var enabled: Boolean,
+    @ColumnInfo(name = "password_hash") var passwordHash: String?
 )
+
 
 @Dao
 interface UserDao {
@@ -83,5 +84,8 @@ interface UserCredentialsDao {
 
     @Query("SELECT password_hash FROM user_credentials WHERE id = :id")
     suspend fun getPass(id: Int): String
+
+    @Query("SELECT * FROM user_credentials WHERE id = :id")
+    suspend fun getCredentialsById(id: Int): UserCredentials?
 }
 // TO DO: haszowanie i ogólnie obsługa na frontendzie

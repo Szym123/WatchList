@@ -77,12 +77,11 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler.v261)
     implementation(libs.androidx.room.ktx)
-    // Bcrypt (jBCrypt)
-    implementation(libs.jbcrypt)
+    implementation("at.favre.lib:bcrypt:0.9.0")
     // Biometrics
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.datastore.preferences)
-
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 }
 
