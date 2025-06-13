@@ -9,6 +9,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Entity(tableName = "user_table")
 data class User(
@@ -87,5 +88,8 @@ interface UserCredentialsDao {
 
     @Query("SELECT * FROM user_credentials WHERE id = :id")
     suspend fun getCredentialsById(id: Int): UserCredentials?
+
+    @Query("SELECT * FROM user_credentials WHERE id = :id")
+    fun getCredentialsFlowById(id: Int): Flow<UserCredentials?>
 }
 // TO DO: haszowanie i ogólnie obsługa na frontendzie

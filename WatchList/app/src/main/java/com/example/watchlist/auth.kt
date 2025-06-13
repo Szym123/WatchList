@@ -7,53 +7,65 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import at.favre.lib.bytes.Bytes
 import at.favre.lib.crypto.bcrypt.BCrypt
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.withContext
 import java.security.SecureRandom
+import kotlinx.coroutines.flow.flowOn
 
-class AuthViewModel(database: AppDatabase2) : ViewModel() {
-    val UserCredentialsDao: UserCredentialsDao
+class AuthViewModel(private val database: AppDatabase2) : ViewModel() {
+    val userCredentialsDao: UserCredentialsDao
 
     init {
-        UserCredentialsDao = database.UserCredentialsDao()
-    }
-    private val secureRandom = SecureRandom() // salt
-
-    suspend fun hashPassword(password: String): Pair<String, String> = withContext(Dispatchers.Default) {
-        // in bcrypt salt is "inside" hash (there is no need to keep salt eny where else)
-        val saltBytes = Bytes.random(16, secureRandom).array() // salt generating
-        val hashedPassword = BCrypt.with(secureRandom).hashToString(12, password.toCharArray()) // hashing passwd with salt
-        return@withContext Pair(hashedPassword, "")
-    }
-
-    suspend fun checkPassword(password: String, hashedPasswordFromDb: String): Boolean = withContext(Dispatchers.Default) {
-        val result = BCrypt.verifyer().verify(password.toCharArray(), hashedPasswordFromDb.toCharArray())
-        return@withContext result.verified
-    }
-
-    suspend fun getCredentials(): UserCredentials? = withContext(Dispatchers.IO) {
-        // Musisz zaktualizować UserCredentialsDao o tę metodę
-        UserCredentialsDao.getCredentialsById(1)
-    }
-
-    suspend fun updateCredentials(credentials: UserCredentials) {
-        // co to robi?????????????????????????????????
+        userCredentialsDao = database.UserCredentialsDao()
         viewModelScope.launch(Dispatchers.IO) {
-            UserCredentialsDao.updatePass(credentials)
-        }
-    }
-
-    suspend fun insertOrUpdateCredentials(enabled: Boolean, passwordHash: String?) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val existingCredentials = UserCredentialsDao.getCredentialsById(1)
+            val existingCredentials = userCredentialsDao.getCredentialsById(1)
             if (existingCredentials == null) {
-                UserCredentialsDao.insertPass(UserCredentials(id = 1, enabled = enabled, passwordHash = passwordHash))
-            } else {
-                UserCredentialsDao.updatePass(existingCredentials.copy(enabled = enabled, passwordHash = passwordHash))
+                userCredentialsDao.insertPass(UserCredentials(id = 1, enabled = false, passwordHash = null))
             }
         }
     }
 
+    private val secureRandom = SecureRandom()
+
+    suspend fun hashPassword(password: String): String = withContext(Dispatchers.Default) {
+        BCrypt.with(secureRandom).hashToString(12, password.toCharArray())
+    }
+
+    suspend fun checkPassword(password: String, hashedPasswordFromDb: String): Boolean = withContext(Dispatchers.Default) {
+        BCrypt.verifyer().verify(password.toCharArray(), hashedPasswordFromDb.toCharArray()).verified
+    }
+
+    fun getCredentialsFlow(): Flow<UserCredentials?> {
+        return userCredentialsDao.getCredentialsFlowById(1)
+            .catch { e -> e.printStackTrace(); emit(null) }
+            .flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getCredentials(): UserCredentials? = withContext(Dispatchers.IO) {
+        userCredentialsDao.getCredentialsById(1)
+    }
+
+    // ZMIANA TUTAJ:
+    fun updateCredentials(credentials: UserCredentials) { // Ten przyjmuje całą encję, więc typ jest OK, bo w encji masz String?
+        viewModelScope.launch(Dispatchers.IO) {
+            userCredentialsDao.updatePass(credentials)
+        }
+    }
+
+    // ZMIANA TUTAJ: Zmień passwordHash: String na passwordHash: String?
+    suspend fun insertOrUpdateCredentials(enabled: Boolean, passwordHash: String?) { // <-- KLUCZOWA ZMIANA
+        viewModelScope.launch(Dispatchers.IO) {
+            val existingCredentials = userCredentialsDao.getCredentialsById(1)
+            if (existingCredentials == null) {
+                userCredentialsDao.insertPass(UserCredentials(id = 1, enabled = enabled, passwordHash = passwordHash))
+            } else {
+                userCredentialsDao.updatePass(existingCredentials.copy(enabled = enabled, passwordHash = passwordHash))
+            }
+        }
+    }
 }
+
 
 // 5. ViewModel Factory
 class AuthViewModelFactory(val database: AppDatabase2) : ViewModelProvider.Factory {
