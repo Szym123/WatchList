@@ -108,7 +108,7 @@ fun CardInList(userViewModel: UserViewModel, user: User, navController: NavHostC
                     .fillMaxHeight()
                     .clickable{
                         navController.currentBackStackEntry?.savedStateHandle?.set("id", (user.id.toInt()-1).toString())
-                        navController.navigate("input")
+                        navController.navigate("details")
                     },
                 colors = CardDefaults.cardColors(containerColor = Color.DarkGray)
             ) {

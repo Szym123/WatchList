@@ -1,15 +1,41 @@
-package com.example.watchlist
+import com.example.watchlist.AppTopBar
+import com.example.watchlist.CardWithPhoto
+import com.example.watchlist.UserViewModel
 
+
+import android.net.Uri
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.core.net.toUri
+import com.example.watchlist.LiveTvScreen
 
 @Composable
-fun DetailsScreen(navController: NavHostController) {
+fun DetailsScreen(navController: NavHostController, userViewModel: UserViewModel) {
+    var id: Int? = null
+    navController.previousBackStackEntry?.savedStateHandle?.get<String>(key = "id")?.let {
+        id = it.toInt()
+    }
+
+
+    val users by userViewModel.allUsers.observeAsState(emptyList())
+
+    val user = users[id!!]
+    val displayName = user.name
+    val displayAdditionalInfo = user.additionalInfo
+    val displayDescription = user.description
+    val displayVideo = user.video
+    val displayImageUri = user.image!!.toUri()
+
 
     Scaffold(
         topBar = {
@@ -19,28 +45,41 @@ fun DetailsScreen(navController: NavHostController) {
                 navController = navController
             )
         },
-        bottomBar = {
-            AppNavigationBar(navController)
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("input") }) {
-                Icon(
-                    imageVector = Icons.Default.Create,
-                    contentDescription = "Add"
-                )
-            }
-        }
+        bottomBar = { }
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-        ){
-            Text("Image")
-            Text("Name")
-            Text("SubName")
-            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu risus justo. Ut viverra mi quis nunc suscipit, quis eleifend eros condimentum. Nunc faucibus nulla dolor, et consectetur eros porttitor a. Donec gravida, mauris eu condimentum malesuada, lectus dolor lacinia nunc, ut semper lacus tellus ut dolor. Vestibulum id ultricies lacus. Aenean vitae consequat lectus. Sed ac aliquet nulla.")
-            LiveTvScreen("MqvQiexh42w")
+        ) {
+            CardWithPhoto(displayImageUri)
+            DisplayItem("Title", displayName)
+            DisplayItem("Subtitle", displayAdditionalInfo)
+            DisplayItem("Descryption", displayDescription)
+            DisplayItem("sth", displayVideo.toString())
+
+            LiveTvScreen(displayVideo.toString())
         }
+    }
+}
+
+@Composable
+fun DisplayItem(label: String, value: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }

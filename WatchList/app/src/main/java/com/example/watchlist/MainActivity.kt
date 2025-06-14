@@ -1,5 +1,6 @@
 package com.example.watchlist
 
+import DetailsScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import com.example.watchlist.ui.theme.WatchListTheme
@@ -44,7 +47,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val userViewModel: UserViewModel = viewModel(factory = userViewModelFactory)
-            val authViewModel: AuthViewModel = viewModel(factory = authViewModelFactory) // Pobierz AuthViewModel
+            val authViewModel: AuthViewModel = viewModel(factory = authViewModelFactory)
             val systemDarkTheme = isSystemInDarkTheme()
             var isDarkTheme by remember { mutableStateOf(systemDarkTheme) }
 
@@ -117,7 +120,7 @@ fun NavigationGraph(
                     authViewModel = authViewModel
                 )
             }
-            composable("details") { DetailsScreen(navController) }
+            composable("details") { DetailsScreen(navController, userViewModel) }
         }
     }
 }
