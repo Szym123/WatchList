@@ -27,13 +27,7 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
     val context = LocalContext.current
 
     Scaffold(
-        topBar = {
-            AppTopBar(
-                showBackArrow = false,
-                onBackClick = { /* No-op */ },
-                navController = navController
-            )
-        }
+        topBar = { }
     ) { padding ->
         Column(
             modifier = Modifier

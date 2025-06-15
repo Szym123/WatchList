@@ -61,8 +61,9 @@ fun DetailsScreen(navController: NavHostController, userViewModel: UserViewModel
             DisplayItem("Title", displayName)
             DisplayItem("Subtitle", displayAdditionalInfo)
             DisplayItem("Descryption", displayDescription)
-
-            LiveTvScreen(displayVideo.toString())
+            if (displayVideo != null && displayVideo != "") {
+                LiveTvScreen(displayVideo.toString())
+                }
         }
     }
 }

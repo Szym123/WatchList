@@ -50,14 +50,11 @@ fun SettingsScreen(
                 onClick = {
                     coroutineScope.launch {
                         if (userCredentials?.enabled == true) {
-                            // HASŁO JEST AKTYWNE -> DEZAKTYWUJ
                             authViewModel.updateCredentials(
                                 userCredentials!!.copy(enabled = false, passwordHash = null)
                             )
-                            Toast.makeText(context, "Pass deactivated", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Roger roger", Toast.LENGTH_SHORT).show()
                         } else {
-                            // HASŁO NIEAKTYWNE -> AKTYWUJ I PRZEJDŹ DO USTAWIENIA
-                            // Najpierw ustaw enabled na true, hash na null, aby system wiedział, że trzeba go ustawić
                             authViewModel.insertOrUpdateCredentials(enabled = true, passwordHash = null)
                             navController.navigate("password")
                         }
@@ -69,11 +66,10 @@ fun SettingsScreen(
             ) {
                 val buttonText = when {
                     userCredentials?.enabled == true -> "Dezactivate pass"
-                    else -> "Aktywuj hasło"
+                    else -> "Activate pass"
                 }
                 Text(buttonText)
             }
-            // Ten przycisk "Change Password" jest widoczny tylko, gdy hasło jest enabled i ma hash (czyli nie jest null)
             if (userCredentials?.enabled == true && userCredentials?.passwordHash != null) {
                 Button(
                     onClick = {
@@ -88,6 +84,15 @@ fun SettingsScreen(
                 }
             }
 
+            Button(
+                onClick = { userViewModel.deleteAll() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .padding(5.dp)
+            ) {
+                Text("Delete all users")
+            }
 
             CardWithSwitch(
                 isDarkTheme = isDarkTheme,
@@ -116,8 +121,8 @@ fun CardWithSwitch(
         ) {
             Text(
                 text = "Dark Mode/Light Mode",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.W500,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W400,
                 modifier = Modifier.padding(start = 16.dp)
             )
             Switch(
