@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import androidx.compose.runtime.LaunchedEffect
 import androidx.core.net.toUri
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) {
@@ -55,13 +56,15 @@ fun InputScreen(navController: NavHostController, userViewModel: UserViewModel) 
             imageUri = user.image!!.toUri()
         }
     }
-
+    val context = LocalContext.current
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
                 imageUri = uri
+                val flag = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                context.contentResolver.takePersistableUriPermission(uri, flag)
             } else {
                 Log.d("PhotoPicker", "No media selected")
             }

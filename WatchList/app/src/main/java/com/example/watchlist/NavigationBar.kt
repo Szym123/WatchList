@@ -1,10 +1,14 @@
 package com.example.watchlist
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.Composable
@@ -20,25 +24,25 @@ fun AppNavigationBar(navController: NavHostController) {
             onClick = { navController.navigate("main") }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Info, contentDescription = "Second") },
+            icon = { Icon(Icons.Default.Add, contentDescription = "input") },
             label = { Text("Input") },
             selected = false,
             onClick = { navController.navigate("input") }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Info, contentDescription = "Second") },
+            icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
             label = { Text("Settings") },
             selected = false,
             onClick = { navController.navigate("settings") }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Info, contentDescription = "Second") },
+            icon = { Icon(Icons.Default.DateRange, contentDescription = "Password") },
             label = { Text("Password") },
             selected = false,
             onClick = { navController.navigate("password") }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Info, contentDescription = "Second") },
+            icon = { Icon(Icons.Default.Lock, contentDescription = "Second") },
             label = { Text("login") },
             selected = false,
             onClick = { navController.navigate("login") }

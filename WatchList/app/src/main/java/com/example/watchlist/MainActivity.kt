@@ -84,9 +84,7 @@ fun NavigationGraph(
         startDestination = if (credentials != null) {
             if (credentials.enabled && credentials.passwordHash != null) {
                 "login"
-            } else if (credentials.enabled && credentials.passwordHash == null) {
-                "password"
-            } else {
+            }  else {
                 "main"
             }
         } else {
