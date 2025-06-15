@@ -1,21 +1,16 @@
 import com.example.watchlist.AppTopBar
 import com.example.watchlist.CardWithPhoto
 import com.example.watchlist.UserViewModel
-
-
-import android.net.Uri
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.LaunchedEffect
 import androidx.core.net.toUri
 import com.example.watchlist.LiveTvScreen
 
@@ -45,7 +40,17 @@ fun DetailsScreen(navController: NavHostController, userViewModel: UserViewModel
                 navController = navController
             )
         },
-        bottomBar = { }
+        bottomBar = { },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set("id", (user.id.toInt()-1).toString())
+                    navController.navigate("input")
+                }
+            ) {
+                Icon(Icons.Filled.Edit, "Edit")
+            }
+        }
     ) { padding ->
         Column(
             modifier = Modifier
